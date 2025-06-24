@@ -1,0 +1,48 @@
+.day-list {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.day-list > div:nth-child(1) {
+    color: rgb(255, 0, 0);
+}
+
+.date-list {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    place-items: center;
+}
+
+.date-list > div {
+    margin-top: 45px;
+    cursor: pointer;
+}
+
+.date-list > div:active {
+    color: red;
+}
+
+.not-current-days {
+    color: rgb(128, 128, 128);
+}
+
+.date-list .current-days:nth-child(7n + 1) {
+    color: rgb(255, 0, 0);
+}
+
+.date-list .today {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    background-color: rgb(133, 180, 250);
+    color: white;
+    border-radius: 50%;
+    box-sizing: border-box;
+}
+
+.date-list .selected-date {
+    color: rgb(133, 180, 250);
+}
