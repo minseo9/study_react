@@ -1,8 +1,14 @@
 import "../styles/Calendar.css";
 import dayjs from "dayjs";
-import { useState } from "react";
 
-const Calendar = ({ date, selectedDate, setSelectedDate }) => {
+import { useContext } from "react";
+import { DateContext } from "../App";
+import { SelectedDatContext } from "../App";
+
+const Calendar = () => {
+    const { date } = useContext(DateContext);
+    const { selectedDate, setSelectedDate } = useContext(SelectedDatContext);
+
     const today = dayjs();
     const prevMonth = date.subtract(1, "month");
     const prevLastDate = prevMonth.endOf("month").date();

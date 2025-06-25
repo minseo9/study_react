@@ -1,55 +1,25 @@
 import "../styles/Home.css";
-import dayjs from "dayjs";
-import { useState } from "react";
 import Header from "../components/Header";
 import Calender from "../components/Calendar";
 import List from "../components/List";
 
-const testTodo = [
-    {
-        isChecked: false,
-        date: dayjs(),
-        content: "test1",
-        memo: "memo1",
-    },
-    {
-        isChecked: false,
-        date: dayjs(),
-        content: "test2",
-        memo: "memo",
-    },
-];
+import { useContext } from "react";
+import { SelectedDatContext } from "../App";
+import { TodoContext } from "../App";
 
 const Home = () => {
-    const [date, setDate] = useState(dayjs());
-    const [selectedDate, setSelectedDate] = useState(date);
-    const [todo, setTodo] = useState([...testTodo]);
+    const { selectedDate, setSelectedDate } = useContext(SelectedDatContext);
+    const { todo } = useContext(TodoContext);
 
     let key = 0;
 
-    function changePrevMonth() {
-        setDate(date.subtract(1, "month"));
-    }
-
-    function changeNextMonth() {
-        setDate(date.add(1, "month"));
-    }
+    console.log(todo);
 
     return (
         <div>
             <div className="calendar-section">
-                <Header
-                    date={date}
-                    setDate={setDate}
-                    setSelectedDate={setSelectedDate}
-                    changePrevMonth={changePrevMonth}
-                    changeNextMonth={changeNextMonth}
-                />
-                <Calender
-                    date={date}
-                    selectedDate={selectedDate}
-                    setSelectedDate={setSelectedDate}
-                />
+                <Header />
+                <Calender />
             </div>
             <div className="list-section">
                 <div className="select-day-view">{`${selectedDate.year()}년 ${

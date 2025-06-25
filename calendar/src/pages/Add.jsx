@@ -1,9 +1,9 @@
-import AddInput from "../components/AddInput";
+import Editor from "../components/Editor";
 
 const Add = () => {
     return (
         <div>
-            <AddInput />
+            <Editor />
         </div>
     );
 };
