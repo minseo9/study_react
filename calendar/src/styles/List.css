@@ -23,4 +23,5 @@
 
 .todo-list .button-container > button {
     border: none;
+    cursor: pointer;
 }

@@ -1,16 +1,17 @@
 import "../styles/Calendar.css";
 import dayjs from "dayjs";
 
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { DateContext } from "../App";
 import { SelectedDatContext } from "../App";
 
-const Calendar = () => {
-    const { date } = useContext(DateContext);
+const Calendar = ({ changePrevMonth, changeNextMonth }) => {
+    const { date, setDate } = useContext(DateContext);
     const { selectedDate, setSelectedDate } = useContext(SelectedDatContext);
 
     const today = dayjs();
     const prevMonth = date.subtract(1, "month");
+    const nextMonth = date.add(1, "month");
     const prevLastDate = prevMonth.endOf("month").date();
     const currLastDate = date.daysInMonth();
     const currFirstDay = date.startOf("month").day();
@@ -34,6 +35,18 @@ const Calendar = () => {
         setSelectedDate(date.date(e.target.textContent));
     };
 
+    const changePrevSelectedDate = (e) => {
+        const clickDate = e.target.textContent;
+        changePrevMonth();
+        setSelectedDate(prevMonth.date(clickDate));
+    };
+
+    const changeNextSelectedDate = (e) => {
+        const clickDate = e.target.textContent;
+        changeNextMonth();
+        setSelectedDate(nextMonth.date(clickDate));
+    };
+
     return (
         <div>
             <div className="day-list">
@@ -47,8 +60,13 @@ const Calendar = () => {
             </div>
             <div className="date-list">
                 {prevDays.map((day) => (
-                    <div key={day} className="not-current-days">
+                    <div
+                        key={day}
+                        className="not-current-days"
+                        onClick={changePrevSelectedDate}
+                    >
                         {day}
+                        <div class="icon"></div>
                     </div>
                 ))}
                 {currDays.map((day) => (
@@ -64,11 +82,17 @@ const Calendar = () => {
                         }
                     >
                         {day}
+                        <div class="icon"></div>
                     </div>
                 ))}
                 {nextDays.map((day) => (
-                    <div key={day} className="not-current-days">
+                    <div
+                        key={day}
+                        className="not-current-days"
+                        onClick={changeNextSelectedDate}
+                    >
                         {day}
+                        <div class="icon"></div>
                     </div>
                 ))}
             </div>

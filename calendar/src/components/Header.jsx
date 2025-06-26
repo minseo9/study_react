@@ -6,19 +6,11 @@ import { useContext } from "react";
 import { DateContext } from "../App";
 import { SelectedDatContext } from "../App";
 
-const Header = () => {
+const Header = ({ changePrevMonth, changeNextMonth }) => {
     const { date, setDate } = useContext(DateContext);
     const { selectedDate, setSelectedDate } = useContext(SelectedDatContext);
 
     const nav = useNavigate();
-
-    function changePrevMonth() {
-        setDate(date.subtract(1, "month"));
-    }
-
-    function changeNextMonth() {
-        setDate(date.add(1, "month"));
-    }
 
     const movingToday = () => {
         setDate(dayjs());

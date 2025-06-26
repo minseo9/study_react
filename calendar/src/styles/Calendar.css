@@ -1,5 +1,6 @@
 .day-list {
     margin-top: 50px;
+    margin-bottom: 25px;
     display: flex;
     justify-content: space-around;
 }
@@ -15,7 +16,8 @@
 }
 
 .date-list > div {
-    margin-top: 45px;
+    margin-top: 15px;
+    margin-bottom: 40px;
     cursor: pointer;
 }
 
@@ -45,4 +47,11 @@
 
 .date-list .selected-date {
     color: rgb(133, 180, 250);
+}
+
+.icon {
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
+    background-color: pink;
 }

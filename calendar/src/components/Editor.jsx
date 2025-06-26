@@ -1,8 +1,8 @@
 import "../styles/Editor.css";
 import dayjs from "dayjs";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { SelectedDatContext } from "../App";
 import { TodoContext } from "../App";
 
@@ -11,6 +11,7 @@ const Editor = () => {
     const { selectedDate } = useContext(SelectedDatContext);
     const { todo, setTodo } = useContext(TodoContext);
     const nav = useNavigate();
+    const location = useLocation();
 
     const [inputTodo, setInputTodo] = useState({
         id: null,
@@ -20,15 +21,17 @@ const Editor = () => {
         memo: "",
     });
 
-    // if (state) {
-    //     setInputTodo({
-    //         id: state.id,
-    //         isChecked: state.isChecked,
-    //         date: state.date,
-    //         content: state.content,
-    //         memo: state.memo,
-    //     });
-    // }
+    useEffect(() => {
+        if (location.state) {
+            setInputTodo({
+                id: location.state.id,
+                isChecked: location.state.isChecked,
+                date: dayjs(location.state.date),
+                content: location.state.content,
+                memo: location.state.memo,
+            });
+        }
+    }, [location.state]);
 
     const changeInput = (e) => {
         const name = e.target.name;
@@ -41,15 +44,24 @@ const Editor = () => {
     };
 
     const saveNewTodo = () => {
-        const todayTodoNum = todo.filter((todo) =>
-            selectedDate.isSame(inputTodo.date, "day")
-        );
-        const todoId = `${inputTodo.date.format("YYYY-MM-DD")}-${
-            todayTodoNum.length + 1
-        }`;
-        const newTodo = { ...inputTodo, id: todoId };
+        if (location.state) {
+            const newTodo = todo.map((todo) =>
+                todo.id === inputTodo.id ? inputTodo : todo
+            );
 
-        setTodo([...todo, newTodo]);
+            setTodo(newTodo);
+        } else {
+            const todayTodoNum = todo.filter((todo) =>
+                selectedDate.isSame(inputTodo.date, "day")
+            );
+            const todoId = `${inputTodo.date.format("YYYY-MM-DD")}-${
+                todayTodoNum.length + 1
+            }`;
+            const newTodo = { ...inputTodo, id: todoId };
+
+            setTodo([...todo, newTodo]);
+        }
+
         nav("/", { replace: true });
     };
 
@@ -87,7 +99,11 @@ const Editor = () => {
                 ></textarea>
             </section>
             <section className="submit-button-container">
-                <button onClick={() => saveNewTodo()}>저장</button>
+                <button
+                    onClick={() => (inputTodo.content ? saveNewTodo() : null)}
+                >
+                    저장
+                </button>
             </section>
         </div>
     );
