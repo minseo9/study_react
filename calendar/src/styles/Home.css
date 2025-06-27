@@ -7,3 +7,13 @@
     margin-bottom: 20px;
     margin-left: 5px;
 }
+
+@media (min-width: 1000px) {
+    .home {
+        display: flex;
+    }
+    .list-section {
+        margin-left: 10px;
+        width: 50vw;
+    }
+}

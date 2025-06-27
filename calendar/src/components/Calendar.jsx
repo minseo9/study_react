@@ -65,7 +65,7 @@ const Calendar = ({ changePrevMonth, changeNextMonth }) => {
     };
 
     return (
-        <div>
+        <div className="calendar">
             <div className="day-list">
                 <div>일</div>
                 <div>월</div>

@@ -1,3 +1,9 @@
+@media (min-width: 1000px) {
+    .calendar {
+        width: 50vw;
+    }
+}
+
 .day-list {
     margin-top: 50px;
     margin-bottom: 25px;

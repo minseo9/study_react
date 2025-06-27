@@ -26,7 +26,7 @@ const Home = () => {
     }
 
     return (
-        <div>
+        <div className="home">
             <div className="calendar-section">
                 <Header
                     changePrevMonth={changePrevMonth}
