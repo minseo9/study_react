@@ -3,8 +3,7 @@ import dayjs from "dayjs";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { useContext, useState, useEffect } from "react";
-import { SelectedDatContext } from "../App";
-import { TodoContext } from "../App";
+import { SelectedDatContext, TodoContext } from "../App";
 
 // 수정인지 새로 추가인지 확인할 수 있을만한..게 필요함
 const Editor = () => {

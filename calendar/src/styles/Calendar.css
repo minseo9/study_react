@@ -17,19 +17,19 @@
 
 .date-list > div {
     margin-top: 15px;
-    margin-bottom: 40px;
+    margin-bottom: 35px;
     cursor: pointer;
 }
 
 .date-list > div:active {
-    color: red;
+    color: rgb(133, 180, 250);
 }
 
 .not-current-days {
     color: rgb(128, 128, 128);
 }
 
-.date-list .current-days:nth-child(7n + 1) {
+.date-list > div:nth-child(7n + 1) .current-days {
     color: rgb(255, 0, 0);
 }
 
@@ -50,8 +50,13 @@
 }
 
 .icon {
+    margin: 0 auto;
+    margin-top: 5px;
     width: 10px;
     height: 10px;
     border-radius: 10px;
-    background-color: pink;
+}
+
+.view-icon {
+    background-color: rgb(174, 131, 230);
 }

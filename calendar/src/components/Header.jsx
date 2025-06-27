@@ -3,8 +3,7 @@ import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 
 import { useContext } from "react";
-import { DateContext } from "../App";
-import { SelectedDatContext } from "../App";
+import { DateContext, SelectedDatContext } from "../App";
 
 const Header = ({ changePrevMonth, changeNextMonth }) => {
     const { date, setDate } = useContext(DateContext);

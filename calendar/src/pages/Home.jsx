@@ -7,9 +7,7 @@ import DeleteModal from "../components/DeleteModal";
 import MemoModal from "../components/MemoModal";
 
 import { useContext, useState, useRef } from "react";
-import { DateContext } from "../App";
-import { SelectedDatContext } from "../App";
-import { TodoContext } from "../App";
+import { DateContext, SelectedDatContext, TodoContext } from "../App";
 
 const Home = () => {
     const { date, setDate } = useContext(DateContext);

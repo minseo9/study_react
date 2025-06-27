@@ -2,12 +2,12 @@ import "../styles/Calendar.css";
 import dayjs from "dayjs";
 
 import { useContext, useEffect } from "react";
-import { DateContext } from "../App";
-import { SelectedDatContext } from "../App";
+import { DateContext, SelectedDatContext, TodoContext } from "../App";
 
 const Calendar = ({ changePrevMonth, changeNextMonth }) => {
     const { date, setDate } = useContext(DateContext);
     const { selectedDate, setSelectedDate } = useContext(SelectedDatContext);
+    const { todo } = useContext(TodoContext);
 
     const today = dayjs();
     const prevMonth = date.subtract(1, "month");
@@ -47,6 +47,23 @@ const Calendar = ({ changePrevMonth, changeNextMonth }) => {
         setSelectedDate(nextMonth.date(clickDate));
     };
 
+    const isTodo = (day, type) => {
+        switch (type) {
+            case "previous":
+                return todo.some((todo) =>
+                    todo.date.isSame(prevMonth.date(day), "day")
+                );
+            case "current":
+                return todo.some((todo) =>
+                    todo.date.isSame(date.date(day), "day")
+                );
+            case "next":
+                return todo.some((todo) =>
+                    todo.date.isSame(nextMonth.date(day), "day")
+                );
+        }
+    };
+
     return (
         <div>
             <div className="day-list">
@@ -60,39 +77,61 @@ const Calendar = ({ changePrevMonth, changeNextMonth }) => {
             </div>
             <div className="date-list">
                 {prevDays.map((day) => (
-                    <div
-                        key={day}
-                        className="not-current-days"
-                        onClick={changePrevSelectedDate}
-                    >
-                        {day}
-                        <div class="icon"></div>
+                    <div key={day}>
+                        <div
+                            key={day}
+                            className="not-current-days"
+                            onClick={changePrevSelectedDate}
+                        >
+                            {day}
+                        </div>
+                        <div
+                            className={
+                                isTodo(day, "previous")
+                                    ? "icon view-icon"
+                                    : "icon"
+                            }
+                        ></div>
                     </div>
                 ))}
                 {currDays.map((day) => (
-                    <div
-                        onClick={changeSelectedDate}
-                        key={day}
-                        className={
-                            isToday(day)
-                                ? "today"
-                                : isSelectedDate(day)
-                                ? "selected-date"
-                                : "current-days"
-                        }
-                    >
-                        {day}
-                        <div class="icon"></div>
+                    <div key={day}>
+                        <div
+                            onClick={changeSelectedDate}
+                            key={day}
+                            className={
+                                isToday(day)
+                                    ? "today"
+                                    : isSelectedDate(day)
+                                    ? "selected-date"
+                                    : "current-days"
+                            }
+                        >
+                            {day}
+                        </div>
+                        <div
+                            className={
+                                isTodo(day, "current")
+                                    ? "icon view-icon"
+                                    : "icon"
+                            }
+                        ></div>
                     </div>
                 ))}
                 {nextDays.map((day) => (
-                    <div
-                        key={day}
-                        className="not-current-days"
-                        onClick={changeNextSelectedDate}
-                    >
-                        {day}
-                        <div class="icon"></div>
+                    <div key={day}>
+                        <div
+                            key={day}
+                            className="not-current-days"
+                            onClick={changeNextSelectedDate}
+                        >
+                            {day}
+                        </div>
+                        <div
+                            className={
+                                isTodo(day, "next") ? "icon view-icon" : "icon"
+                            }
+                        ></div>
                     </div>
                 ))}
             </div>

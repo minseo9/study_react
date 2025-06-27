@@ -1,7 +1,9 @@
 .list-section {
-    margin-top: 50px;
+    margin-top: 20px;
+    padding-bottom: 20px;
 }
 
 .select-day-view {
     margin-bottom: 20px;
+    margin-left: 5px;
 }
