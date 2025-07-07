@@ -13,7 +13,7 @@ import axios from "axios";
     - 이메일: 이메일 주소 형식이 맞는지
     - 생일: 선택을 했는지
 */
-const idREGEX = /^[a-z0-9][a-z0-9_-]{7,15}$/;
+const idREGEX = /^(?!.*\s)[a-z0-9][a-z0-9_-]{7,15}$/;
 const pwREGEX = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@\-_])[A-Za-z\d!@\-_]{8,16}$/;
 const phoneREGEX = /^01[016789][0-9]{7,8}$/;
 const emailREGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -41,6 +41,7 @@ const Join = () => {
 
     // 유효성 검사 결과
     const isInputId = useRef(false);
+    const isInputOverlapId = useRef(false);
     const isInputPwd = useRef(false);
     const isInputCheckPwd = useRef(false);
     const isInputPhone = useRef(false);
@@ -82,6 +83,7 @@ const Join = () => {
         );
     };
 
+    // 아이디 유효성 검사
     const checkedId = (value) => {
         const isREGEXId = value.trim() !== "" && idREGEX.test(value);
         if (!isREGEXId) {
@@ -95,6 +97,27 @@ const Join = () => {
         }
     };
 
+    // 아이디 중복 검사
+    const checkOverlapId = async () => {
+        try {
+            const response = await axios.get(url);
+            const userList = response.data;
+            const isOverlap = userList.some((list) => list.id === user.id);
+
+            if (isOverlap) {
+                isInputOverlapId.current = false;
+                alert("중복된 아이디입니다.");
+            } else {
+                if (user.id === "") return;
+                isInputOverlapId.current = true;
+                alert("사용 가능한 아이디입니다.");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    // 비밀번호 유효성 검사
     const checkedPwd = (value) => {
         const isREGEXPwd = value.trim() !== "" && pwREGEX.test(value);
         if (!isREGEXPwd) {
@@ -108,6 +131,7 @@ const Join = () => {
         }
     };
 
+    // 비밀번호 확인 검사
     const checkedPwdMatch = (value) => {
         if (value !== user.password) {
             changeInputStyle(checkPwdRef, false);
@@ -120,6 +144,7 @@ const Join = () => {
         }
     };
 
+    // 전화번호 유효성 검사
     const checkedPhone = (value) => {
         const isREGEXPhone = value.trim() !== "" && phoneREGEX.test(value);
         if (!isREGEXPhone) {
@@ -133,6 +158,7 @@ const Join = () => {
         }
     };
 
+    // 이메일 유효성 검사
     const checkedEmail = (value) => {
         const isREGEXEmail = value.trim() !== "" && emailREGEX.test(value);
         if (!isREGEXEmail) {
@@ -146,6 +172,7 @@ const Join = () => {
         }
     };
 
+    // 생년월일 유효성 검사
     const checkedBirthday = (year, month, date) => {
         const today = new Date();
         const inputDate = new Date(`${year}-${month}-${date}`);
@@ -175,6 +202,7 @@ const Join = () => {
 
         if (
             isInputId.current &&
+            isInputOverlapId.current &&
             isInputPwd.current &&
             isInputCheckPwd.current &&
             isInputPhone.current &&
@@ -190,6 +218,9 @@ const Join = () => {
             }
         } else {
             checkedId(user.id);
+            isInputOverlapId.current
+                ? null
+                : alert("아이디 중복 검사를 완료해주세요.");
             checkedPwd(user.password);
             checkedPwdMatch(checkPwd);
             checkedPhone(user.phone);
@@ -225,14 +256,17 @@ const Join = () => {
                     onChange={(e) => {
                         changeInput(e);
                         checkedId(e.target.value);
+                        isInputOverlapId.current = false;
                     }}
                     ref={idRef}
+                    checkOverlapId={checkOverlapId}
                 />
                 {idError && (
                     <span className="error-text error-id">
                         아이디 형식이 올바르지 않습니다.
                     </span>
                 )}
+
                 <InputField
                     label="비밀번호"
                     name="password"
@@ -273,7 +307,7 @@ const Join = () => {
                     label="전화번호"
                     name="phone"
                     id="phone"
-                    type="number"
+                    type="tel"
                     placeholder="휴대폰 번호 입력(' - ' 제외 11자리)"
                     value={user.phone}
                     onChange={(e) => {
