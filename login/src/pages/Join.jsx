@@ -235,7 +235,16 @@ const Join = () => {
 
     return (
         <div className="join-container">
-            <h3>회원가입</h3>
+            <header>
+                <button
+                    onClick={() => {
+                        nav("/", { replace: true });
+                    }}
+                >
+                    {"<"}
+                </button>
+                <h3>회원가입</h3>
+            </header>
             <div className="join-form">
                 <InputField
                     className="profile-image"

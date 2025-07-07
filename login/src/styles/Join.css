@@ -12,8 +12,34 @@
     padding: 5px 40px;
 }
 
+.join-container > header {
+    position: relative;
+    height: 50px;
+    width: 100%;
+}
+
+.join-container > header > h3 {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 15px;
+}
+
+.join-container > header > button {
+    border: none;
+    background-color: white;
+    font-weight: bold;
+    font-size: 1em;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
 .join-form {
     margin: 20px auto;
+    margin-top: 40px;
 }
 
 .join-form > div > label:not(.input-image > label) {
