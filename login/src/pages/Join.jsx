@@ -1,12 +1,12 @@
 import "../styles/Join.css";
 import InputField from "../components/InputField";
 import InputSelect from "../components/InputSelect";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 /*
-    1. 유효성 검사
+    유효성 검사
     - 아이디: 영문 소문자만, 8~16자 이상, 특수기호(-, _)만 사용, 중복확인버튼
     - 비밀번호: 영문 대소문자만, 8~16자 이상, 특수기호(!, @, -, _) 사용....
     - 전화번호: 11자리가 맞는지, 전화번호가 맞는지?
@@ -27,8 +27,32 @@ const Join = () => {
         birthday: { year: "", month: "", date: "" },
         profile: "",
     });
+    const [checkPwd, setCheckPwd] = useState("");
     const nav = useNavigate();
-    const url = import.meta.env.REACT_APP_API_URL;
+    const url = import.meta.env.VITE_API_URL;
+    const birthdayErrorText = useRef("");
+
+    // html input 값 저장
+    const idRef = useRef();
+    const pwdRef = useRef();
+    const checkPwdRef = useRef();
+    const phoneRef = useRef();
+    const emailRef = useRef();
+
+    // 유효성 검사 결과
+    const isInputId = useRef(false);
+    const isInputPwd = useRef(false);
+    const isInputCheckPwd = useRef(false);
+    const isInputPhone = useRef(false);
+    const isInputEmail = useRef(false);
+    const isInputBirthday = useRef(false);
+
+    const [idError, setIdError] = useState(false);
+    const [pwdError, setPwdError] = useState(false);
+    const [checkPwdError, setCheckPwdError] = useState(false);
+    const [phoneError, setPhoneError] = useState(false);
+    const [emailError, setEmailError] = useState(false);
+    const [birthdayError, setBirthdayError] = useState(false);
 
     const currentYear = new Date().getFullYear();
     const birthday_year = Array.from(
@@ -38,9 +62,10 @@ const Join = () => {
     const birthday_month = Array.from({ length: 12 }, (_, i) => i + 1);
     const birthday_date = Array.from({ length: 31 }, (_, i) => i + 1);
 
-    const changeInput = (event) => {
-        const name = event.target.name;
-        const value = event.target.value;
+    // user 상태 변경
+    const changeInput = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
 
         if (["year", "month", "date"].includes(name)) {
             setUser({ ...user, birthday: { ...user.birthday, [name]: value } });
@@ -49,35 +74,131 @@ const Join = () => {
         }
     };
 
-    const checkInput = (event) => {
-        event.preventDefault();
-
-        const checkId = user.id.trim() !== "" && idREGEX.test(user.id);
-        const checkPw =
-            user.password.trim() !== "" && pwREGEX.test(user.password);
-        const checkPhone =
-            user.phone.trim() !== "" && phoneREGEX.test(user.phone);
-        const checkEmail =
-            user.email.trim() !== "" && emailREGEX.test(user.email);
-        const checkBirthday =
-            user.birthday.year !== "" &&
-            user.birthday.month !== "" &&
-            user.birthday.date !== "";
-
-        console.log(checkBirthday);
-
-        if (checkId && checkPw && checkPhone && checkEmail && checkBirthday)
-            joinUser();
-        else console.log("ㄴㄴ");
+    // input 스타일 변경(빨강 테두리)
+    const changeInputStyle = (inputRef, result) => {
+        inputRef.current.style.setProperty(
+            "border",
+            result ? "1px solid rgb(163, 163, 163)" : "1px solid red"
+        );
     };
 
-    const joinUser = async () => {
-        try {
-            const response = await axios.post(url, user);
-            console.log(response.data);
-            nav("/", { replace: true });
-        } catch (error) {
-            console.log(error);
+    const checkedId = (value) => {
+        const isREGEXId = value.trim() !== "" && idREGEX.test(value);
+        if (!isREGEXId) {
+            changeInputStyle(idRef, false);
+            isInputId.current = false;
+            setIdError(true);
+        } else {
+            changeInputStyle(idRef, true);
+            isInputId.current = true;
+            setIdError(false);
+        }
+    };
+
+    const checkedPwd = (value) => {
+        const isREGEXPwd = value.trim() !== "" && pwREGEX.test(value);
+        if (!isREGEXPwd) {
+            changeInputStyle(pwdRef, false);
+            isInputPwd.current = false;
+            setPwdError(true);
+        } else {
+            changeInputStyle(pwdRef, true);
+            isInputPwd.current = true;
+            setPwdError(false);
+        }
+    };
+
+    const checkedPwdMatch = (value) => {
+        if (value !== user.password) {
+            changeInputStyle(checkPwdRef, false);
+            isInputCheckPwd.current = false;
+            setCheckPwdError(true);
+        } else {
+            changeInputStyle(checkPwdRef, true);
+            isInputCheckPwd.current = true;
+            setCheckPwdError(false);
+        }
+    };
+
+    const checkedPhone = (value) => {
+        const isREGEXPhone = value.trim() !== "" && phoneREGEX.test(value);
+        if (!isREGEXPhone) {
+            changeInputStyle(phoneRef, false);
+            isInputPhone.current = false;
+            setPhoneError(true);
+        } else {
+            changeInputStyle(phoneRef, true);
+            isInputPhone.current = true;
+            setPhoneError(false);
+        }
+    };
+
+    const checkedEmail = (value) => {
+        const isREGEXEmail = value.trim() !== "" && emailREGEX.test(value);
+        if (!isREGEXEmail) {
+            changeInputStyle(emailRef, false);
+            isInputEmail.current = false;
+            setEmailError(true);
+        } else {
+            changeInputStyle(emailRef, true);
+            isInputEmail.current = true;
+            setEmailError(false);
+        }
+    };
+
+    const checkedBirthday = (year, month, date) => {
+        const today = new Date();
+        const inputDate = new Date(`${year}-${month}-${date}`);
+
+        const isREGEXBirthday = year !== "" && month !== "" && date !== "";
+        const isFutureDate = inputDate > today;
+        const isRealDate =
+            inputDate.getFullYear() === Number(year) &&
+            inputDate.getMonth() + 1 === Number(month) &&
+            inputDate.getDate() === Number(date);
+
+        if (!isREGEXBirthday || isFutureDate || !isRealDate) {
+            isInputBirthday.current = false;
+            setBirthdayError(true);
+            birthdayErrorText.current = !isREGEXBirthday
+                ? "생년월일을 모두 선택해주세요."
+                : "생년월일을 확인해주세요.";
+        } else {
+            isInputBirthday.current = true;
+            setBirthdayError(false);
+        }
+    };
+
+    // 회원 정보 저장
+    const joinUser = async (e) => {
+        e.preventDefault();
+
+        if (
+            isInputId.current &&
+            isInputPwd.current &&
+            isInputCheckPwd.current &&
+            isInputPhone.current &&
+            isInputEmail.current &&
+            isInputBirthday.current
+        ) {
+            try {
+                const response = await axios.post(url, user);
+                console.log(response.data);
+                nav("/", { replace: true });
+            } catch (error) {
+                console.log(error);
+            }
+        } else {
+            checkedId(user.id);
+            checkedPwd(user.password);
+            checkedPwdMatch(checkPwd);
+            checkedPhone(user.phone);
+            checkedEmail(user.email);
+            checkedBirthday(
+                user.birthday.year,
+                user.birthday.month,
+                user.birthday.date
+            );
         }
     };
 
@@ -101,8 +222,17 @@ const Join = () => {
                     id="id"
                     placeholder="아이디 입력(8~16자 입력)"
                     value={user.id}
-                    onChange={changeInput}
+                    onChange={(e) => {
+                        changeInput(e);
+                        checkedId(e.target.value);
+                    }}
+                    ref={idRef}
                 />
+                {idError && (
+                    <span className="error-text error-id">
+                        아이디 형식이 올바르지 않습니다.
+                    </span>
+                )}
                 <InputField
                     label="비밀번호"
                     name="password"
@@ -110,15 +240,35 @@ const Join = () => {
                     type="password"
                     placeholder="비밀번호 입력"
                     value={user.password}
-                    onChange={changeInput}
+                    onChange={(e) => {
+                        changeInput(e);
+                        checkedPwd(e.target.value);
+                    }}
+                    ref={pwdRef}
                 />
-                <div></div>
+                {pwdError && (
+                    <span className="error-text error-password">
+                        비밀번호 형식이 올바르지 않습니다.
+                    </span>
+                )}
                 <InputField
                     label="비밀번호 확인"
                     id="checkPassword"
+                    name="checkPassword"
                     type="password"
                     placeholder="비밀번호 확인"
+                    ref={checkPwdRef}
+                    value={checkPwd}
+                    onChange={(e) => {
+                        setCheckPwd(e.target.value);
+                        checkedPwdMatch(e.target.value);
+                    }}
                 />
+                {checkPwdError && (
+                    <span className="error-text error-checkPassword">
+                        비밀번호가 일치하지 않습니다.
+                    </span>
+                )}
                 <InputField
                     label="전화번호"
                     name="phone"
@@ -126,16 +276,34 @@ const Join = () => {
                     type="number"
                     placeholder="휴대폰 번호 입력(' - ' 제외 11자리)"
                     value={user.phone}
-                    onChange={changeInput}
+                    onChange={(e) => {
+                        changeInput(e);
+                        checkedPhone(e.target.value);
+                    }}
+                    ref={phoneRef}
                 />
+                {phoneError && (
+                    <span className="error-text error-phone">
+                        전화번호 형식이 올바르지 않습니다.
+                    </span>
+                )}
                 <InputField
                     label="이메일"
                     name="email"
                     id="email"
                     placeholder="이메일 주소 입력"
                     value={user.email}
-                    onChange={changeInput}
+                    onChange={(e) => {
+                        changeInput(e);
+                        checkedEmail(e.target.value);
+                    }}
+                    ref={emailRef}
                 />
+                {emailError && (
+                    <span className="error-text error-email">
+                        이메일 형식이 올바르지 않습니다.
+                    </span>
+                )}
                 <div className="input-birthday">
                     <p>생일</p>
                     <div className="birthday-select">
@@ -144,7 +312,14 @@ const Join = () => {
                             id="selectBirthdayYear"
                             className="select-year"
                             value={user.birthday.year}
-                            onChange={changeInput}
+                            onChange={(e) => {
+                                changeInput(e);
+                                checkedBirthday(
+                                    e.target.value,
+                                    user.birthday.month,
+                                    user.birthday.date
+                                );
+                            }}
                             text="년도"
                             optionValue={birthday_year}
                         />
@@ -153,7 +328,14 @@ const Join = () => {
                             id="selectBirthdayName"
                             className="select-month"
                             value={user.birthday.month}
-                            onChange={changeInput}
+                            onChange={(e) => {
+                                changeInput(e);
+                                checkedBirthday(
+                                    user.birthday.year,
+                                    e.target.value,
+                                    user.birthday.date
+                                );
+                            }}
                             text="월"
                             optionValue={birthday_month}
                         />
@@ -162,14 +344,26 @@ const Join = () => {
                             id="selectBirthdateDay"
                             className="select-date"
                             value={user.birthday.date}
-                            onChange={changeInput}
+                            onChange={(e) => {
+                                changeInput(e);
+                                checkedBirthday(
+                                    user.birthday.year,
+                                    user.birthday.month,
+                                    e.target.value
+                                );
+                            }}
                             text="일"
                             optionValue={birthday_date}
                         />
                     </div>
                 </div>
+                {birthdayError && (
+                    <span className="error-text error-birthday">
+                        {birthdayErrorText.current}
+                    </span>
+                )}
             </div>
-            <button className="join-button" onClick={checkInput}>
+            <button className="join-button" onClick={joinUser}>
                 회원가입
             </button>
         </div>

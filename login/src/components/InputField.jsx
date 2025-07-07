@@ -7,7 +7,10 @@ const InputField = ({
     value,
     onChange,
     className,
+    ref,
 }) => {
+    const checkOverlap = () => {};
+
     return (
         <div className={`input-${id}`}>
             <label htmlFor={id}>{label}</label>
@@ -19,9 +22,12 @@ const InputField = ({
                 value={value}
                 onChange={onChange}
                 className={className}
+                ref={ref}
             />
             {id === "id" ? (
-                <button className="check-overlap-button">중복확인</button>
+                <button className="check-overlap-button" onClick={checkOverlap}>
+                    중복확인
+                </button>
             ) : null}
         </div>
     );
