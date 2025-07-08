@@ -25,7 +25,6 @@ const Join = () => {
         phone: "",
         email: "",
         birthday: { year: "", month: "", date: "" },
-        profile: "",
     });
     const [checkPwd, setCheckPwd] = useState("");
     const nav = useNavigate();
@@ -246,16 +245,6 @@ const Join = () => {
                 <h3>회원가입</h3>
             </header>
             <div className="join-form">
-                <InputField
-                    className="profile-image"
-                    label="프로필사진"
-                    type="file"
-                    name="profile"
-                    id="image"
-                    onChange={(e) => {
-                        setUser({ ...user, profile: e.target.files[0] });
-                    }}
-                />
                 <InputField
                     label="아이디"
                     name="id"

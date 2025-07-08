@@ -6,7 +6,7 @@
     border: 1px solid rgb(163, 163, 163);
     border-radius: 10px;
     width: 600px;
-    min-height: 750px;
+    /* min-height: 700px; */
     height: auto;
     margin: 30px auto;
     padding: 5px 40px;
@@ -42,12 +42,12 @@
     margin-top: 40px;
 }
 
-.join-form > div > label:not(.input-image > label) {
+.join-form > div > label {
     display: block;
     padding-bottom: 5px;
 }
 
-.join-form > div > input:not(.profile-image) {
+.join-form > div > input {
     width: 300px;
     height: 40px;
     padding: 10px;
@@ -67,15 +67,6 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
     -moz-appearance: textfield;
     appearance: none;
-}
-
-.input-image {
-    margin-bottom: 20px;
-}
-
-.input-image > label {
-    display: block;
-    padding-bottom: 10px;
 }
 
 .input-id {
@@ -128,7 +119,8 @@ input[type="number"] {
     border: none;
     height: 30px;
     border-radius: 5px;
-    margin: 15px 0;
+    margin-top: 15px;
+    margin-bottom: 30px;
     cursor: pointer;
 }
 
