@@ -56,7 +56,7 @@
     height: 40px;
     border: none;
     cursor: pointer;
-    background-color: rgb(51, 51, 148);
+    background-color: rgb(113, 113, 226);
     font-weight: bold;
 }
 
@@ -65,13 +65,19 @@
     gap: 50px;
 }
 
-.weather-view > div {
+.weather-view {
+    margin: 50px auto;
     width: 350px;
     height: 350px;
     background-color: rgb(51, 51, 148);
     border-radius: 20px;
-    margin: 50px 0;
     padding: 10px 20px;
+}
+
+.next-weather-view {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 50px;
 }
 
 .weather-list {

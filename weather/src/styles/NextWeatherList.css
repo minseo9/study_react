@@ -1,0 +1,26 @@
+.next-weather-list {
+    width: 200px;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    background-color: rgb(113, 113, 226);
+}
+
+.date-view > span {
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.temp-text-view {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.temp-min-text {
+    color: blue;
+}
+
+.temp-max-text {
+    color: red;
+}

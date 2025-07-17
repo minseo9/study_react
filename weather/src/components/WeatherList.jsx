@@ -1,12 +1,9 @@
-const WeatherList = ({ max, min }) => {
-    const maxTemp = Math.round(max);
-    const minTemp = Math.round(min);
-
+const WeatherList = ({ maxTemp, minTemp }) => {
     return (
-        <div>
+        <div className="weather-list">
             <div>날짜</div>
-            <div>{maxTemp}</div>
-            <div>{minTemp}</div>
+            <div>{Math.round(maxTemp)}</div>
+            <div>{Math.round(minTemp)}</div>
         </div>
     );
 };
