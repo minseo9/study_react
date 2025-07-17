@@ -3,6 +3,7 @@
 }
 
 .weather {
+    margin: 10px auto;
     width: 850px;
     padding: 50px;
     background-color: rgb(30, 30, 82);
@@ -78,4 +79,18 @@
     display: flex;
     gap: 10px;
     margin-bottom: 50px;
+    overflow-y: auto;
+}
+
+.next-weather-view::-webkit-scrollbar {
+    height: 8px;
+}
+
+.next-weather-view::-webkit-scrollbar-thumb {
+    background-color: white;
+    border-radius: 10px;
+}
+
+.next-weather-view::-webkit-scrollbar-button {
+    display: none;
 }

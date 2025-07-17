@@ -85,7 +85,7 @@ function App() {
                 } else {
                     nextWeatherList.push(data);
                 }
-                if (nextWeatherList.length === 5) break;
+                if (nextWeatherList.length === 16) break;
             }
             setNextWeatherData(nextWeatherList);
 
