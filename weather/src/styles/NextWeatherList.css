@@ -11,16 +11,8 @@
     font-weight: bold;
 }
 
-.temp-text-view {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-}
-
-.temp-min-text {
-    color: blue;
-}
-
-.temp-max-text {
-    color: red;
+.next-weather-img {
+    margin: 0 auto;
+    width: 100px;
+    height: 90px;
 }

@@ -1,0 +1,24 @@
+.day-weather-list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(113, 113, 226);
+    border-radius: 20px;
+    padding: 0 30px;
+}
+
+.day-weather-list:not(:last-child) {
+    margin-bottom: 20px;
+}
+
+.day-weather-list > div > span {
+    padding: 10px;
+}
+
+.min-temp-text {
+    color: blue;
+}
+
+.max-temp-text {
+    color: red;
+}

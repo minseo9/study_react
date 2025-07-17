@@ -15,12 +15,7 @@ const NextWeatherList = ({ data }) => {
                 <img src={imgURL} alt="" />
             </div>
             <div className="temp-text-view">
-                <div className="temp-min-text">
-                    {Math.round(data.main.temp_min)}
-                </div>
-                <div className="temp-max-text">
-                    {Math.round(data.main.temp_max)}
-                </div>
+                <span>{Math.round(data.main.temp)}°</span>
             </div>
         </div>
     );

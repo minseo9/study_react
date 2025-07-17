@@ -3,21 +3,21 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 import CurrentWeatherView from "./components/CurrentWeatherView";
-import WeatherList from "./components/WeatherList";
-import searchButton from "./assets/search-button.png";
 import NextWeatherList from "./components/NextWeatherList";
+import DayWeatherList from "./components/DayWeatherList";
+
+import searchButton from "./assets/search-button.png";
 
 function App() {
     const [location, setLocation] = useState({ lat: null, lon: null });
     const [currentWeatherData, setCurrentWeatherData] = useState({});
-    const [nextWeatherDate, setNextWeatherData] = useState([]);
+    const [nextWeatherData, setNextWeatherData] = useState([]);
+    const [dayWeatherData, setDayWeatherData] = useState([]);
 
     const today = new Date();
     const currentMonth = today.getMonth() + 1;
     const currentDate = today.getDate();
     const currentHour = today.getHours();
-
-    let num = 1;
 
     const weatherURL = `https://api.openweathermap.org/data/2.5/weather`;
     const forecastURL = "https://api.openweathermap.org/data/2.5/forecast";
@@ -73,7 +73,6 @@ function App() {
             });
 
             const forecastData = response.data.list;
-            console.log(forecastData);
 
             const nextWeatherList = [];
             for (const data of forecastData) {
@@ -89,6 +88,36 @@ function App() {
                 if (nextWeatherList.length === 5) break;
             }
             setNextWeatherData(nextWeatherList);
+
+            const dayWeatherList = [];
+            for (const data of forecastData) {
+                const date = data.dt_txt.slice(0, 10);
+                const icon = data.weather[0].icon;
+                const time = Number(data.dt_txt.slice(11, 13));
+                const temp = Math.round(data.main.temp);
+                const maxTemp = Math.round(data.main.temp_max);
+                const minTemp = Math.round(data.main.temp_min);
+
+                if (!dayWeatherList[date]) {
+                    dayWeatherList[date] = {
+                        date: date,
+                        icon: icon,
+                        temp: temp,
+                        maxTemp: maxTemp,
+                        minTemp: minTemp,
+                    };
+                }
+
+                if (time === 12) {
+                    dayWeatherList[date].temp = temp;
+                    dayWeatherList[date].icon = icon;
+                }
+                if (dayWeatherList[date].maxTemp < maxTemp)
+                    dayWeatherList[date].maxTemp = maxTemp;
+                if (dayWeatherList[date].minTemp > minTemp)
+                    dayWeatherList[date].minTemp = minTemp;
+            }
+            setDayWeatherData(Object.values(dayWeatherList));
         } catch (error) {
             console.log(error);
         }
@@ -129,17 +158,15 @@ function App() {
                 )}
             </div>
             <div className="next-weather-view">
-                {nextWeatherDate.map((data) => (
-                    <NextWeatherList data={data} key={num++} />
+                {nextWeatherData.map((data, index) => (
+                    <NextWeatherList data={data} key={index} />
                 ))}
             </div>
-            <div className="weather-list">
-                {currentWeatherData.main && (
-                    <WeatherList
-                        maxTemp={currentWeatherData.main.temp_max}
-                        minTemp={currentWeatherData.main.temp_min}
-                    />
-                )}
+            <div className="day-weather-view">
+                {dayWeatherData &&
+                    dayWeatherData.map((data, index) => (
+                        <DayWeatherList data={data} key={index} />
+                    ))}
             </div>
         </div>
     );

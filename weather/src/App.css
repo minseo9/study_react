@@ -69,7 +69,7 @@
     margin: 50px auto;
     width: 350px;
     height: 350px;
-    background-color: rgb(51, 51, 148);
+    background-color: rgb(113, 113, 226);
     border-radius: 20px;
     padding: 10px 20px;
 }
@@ -78,10 +78,4 @@
     display: flex;
     gap: 10px;
     margin-bottom: 50px;
-}
-
-.weather-list {
-    padding: 10px 20px;
-    background-color: rgb(51, 51, 148);
-    border-radius: 20px;
 }
