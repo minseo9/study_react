@@ -1,0 +1,43 @@
+hr {
+    border: none;
+    height: 2px;
+    background: black;
+}
+
+.address-name-view {
+    display: block;
+    font-size: 1.5em;
+    font-weight: bold;
+    padding: 13px 0;
+}
+
+.weather-info-view {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.weather-info-view > h2 {
+    font-size: 2.5em;
+}
+
+.weather-info-view > img {
+    height: 102px;
+    width: 102px;
+}
+
+.weather-text {
+    display: block;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.temp-view {
+    margin-top: 20px;
+}
+
+.temp-view > span {
+    display: block;
+    text-align: center;
+}
