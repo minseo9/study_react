@@ -5,9 +5,17 @@
 .weather {
     margin: 10px auto;
     width: 850px;
+    min-height: 500px;
     padding: 50px;
     background-color: rgb(30, 30, 82);
     border-radius: 20px;
+}
+
+.loading-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 500px;
 }
 
 .search-bar {

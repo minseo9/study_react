@@ -1,6 +1,7 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { SyncLoader } from "react-spinners";
 
 import CurrentWeatherView from "./components/CurrentWeatherView";
 import NextWeatherList from "./components/NextWeatherList";
@@ -9,6 +10,7 @@ import DayWeatherList from "./components/DayWeatherList";
 import searchButton from "./assets/search-button.png";
 
 function App() {
+    const [loading, setLoading] = useState(true);
     const [location, setLocation] = useState({ lat: null, lon: null });
     const [currentWeatherData, setCurrentWeatherData] = useState({});
     const [nextWeatherData, setNextWeatherData] = useState([]);
@@ -118,6 +120,8 @@ function App() {
                     dayWeatherList[date].minTemp = minTemp;
             }
             setDayWeatherData(Object.values(dayWeatherList));
+
+            setLoading(false);
         } catch (error) {
             console.log(error);
         }
@@ -136,38 +140,49 @@ function App() {
 
     return (
         <div className="weather">
-            <div className="search-bar">
-                <div className="search-input">
-                    <input type="text" placeholder="지역을 입력하세요" />
-                    <button>
-                        <img src={searchButton} alt="" />
-                    </button>
+            {loading ? (
+                <div className="loading-section">
+                    <SyncLoader color="rgb(113, 113, 226)" margin={20} />
                 </div>
-                <button className="current-button">내 위치 찾기</button>
-            </div>
-            <div className="weather-view">
-                {currentWeatherData.weather && (
-                    <CurrentWeatherView
-                        location={location}
-                        imgId={currentWeatherData.weather[0].icon}
-                        temp={currentWeatherData.main.temp}
-                        description={currentWeatherData.weather[0].description}
-                        maxTemp={currentWeatherData.main.temp_max}
-                        minTemp={currentWeatherData.main.temp_min}
-                    />
-                )}
-            </div>
-            <div className="next-weather-view">
-                {nextWeatherData.map((data, index) => (
-                    <NextWeatherList data={data} key={index} />
-                ))}
-            </div>
-            <div className="day-weather-view">
-                {dayWeatherData &&
-                    dayWeatherData.map((data, index) => (
-                        <DayWeatherList data={data} key={index} />
-                    ))}
-            </div>
+            ) : (
+                <div>
+                    <div className="search-bar">
+                        <div className="search-input">
+                            <input
+                                type="text"
+                                placeholder="지역을 입력하세요"
+                            />
+                            <button>
+                                <img src={searchButton} alt="" />
+                            </button>
+                        </div>
+                        <button className="current-button">내 위치 찾기</button>
+                    </div>
+                    <div className="weather-view">
+                        <CurrentWeatherView
+                            location={location}
+                            imgId={currentWeatherData.weather[0].icon}
+                            temp={currentWeatherData.main.temp}
+                            description={
+                                currentWeatherData.weather[0].description
+                            }
+                            maxTemp={currentWeatherData.main.temp_max}
+                            minTemp={currentWeatherData.main.temp_min}
+                        />
+                    </div>
+                    <div className="next-weather-view">
+                        {nextWeatherData.map((data, index) => (
+                            <NextWeatherList data={data} key={index} />
+                        ))}
+                    </div>
+                    <div className="day-weather-view">
+                        {dayWeatherData &&
+                            dayWeatherData.map((data, index) => (
+                                <DayWeatherList data={data} key={index} />
+                            ))}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
