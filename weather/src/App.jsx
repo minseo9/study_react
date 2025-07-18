@@ -11,6 +11,7 @@ import searchButton from "./assets/search-button.png";
 
 function App() {
     const [loading, setLoading] = useState(true);
+    const [searchArea, setSearchArea] = useState("");
     const [location, setLocation] = useState({ lat: null, lon: null });
     const [currentWeatherData, setCurrentWeatherData] = useState({});
     const [nextWeatherData, setNextWeatherData] = useState([]);
@@ -23,6 +24,7 @@ function App() {
 
     const weatherURL = `https://api.openweathermap.org/data/2.5/weather`;
     const forecastURL = "https://api.openweathermap.org/data/2.5/forecast";
+    const geoURL = "https://dapi.kakao.com/v2/local/search/address.json";
 
     const getCurrentLocation = () => {
         const success = (position) => {
@@ -127,6 +129,26 @@ function App() {
         }
     };
 
+    const clickSearchButton = async () => {
+        try {
+            const response = await axios.get(geoURL, {
+                params: {
+                    query: searchArea,
+                },
+                headers: {
+                    Authorization: `KakaoAK ${
+                        import.meta.env.VITE_KAKAO_API_KEY
+                    }`,
+                },
+            });
+            const addressData = response.data.documents[0].address;
+            setLocation({ lat: addressData.y, lon: addressData.x });
+            setSearchArea("");
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     useEffect(() => {
         getCurrentLocation();
     }, []);
@@ -151,12 +173,22 @@ function App() {
                             <input
                                 type="text"
                                 placeholder="지역을 입력하세요"
+                                value={searchArea}
+                                onChange={(e) => setSearchArea(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") clickSearchButton();
+                                }}
                             />
-                            <button>
+                            <button onClick={clickSearchButton}>
                                 <img src={searchButton} alt="" />
                             </button>
                         </div>
-                        <button className="current-button">내 위치 찾기</button>
+                        <button
+                            className="current-button"
+                            onClick={getCurrentLocation}
+                        >
+                            내 위치 찾기
+                        </button>
                     </div>
                     <div className="weather-view">
                         <CurrentWeatherView

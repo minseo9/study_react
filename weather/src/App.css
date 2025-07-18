@@ -34,12 +34,12 @@
     width: 280px;
     border-radius: 50px;
     background-color: rgb(212, 212, 212);
+    padding: 0 20px;
     border: none;
     outline: none;
 }
 
 .search-input > input::placeholder {
-    padding-left: 15px;
     color: black;
 }
 
