@@ -122,8 +122,6 @@ function App() {
                     dayWeatherList[date].minTemp = minTemp;
             }
             setDayWeatherData(Object.values(dayWeatherList));
-
-            setLoading(false);
         } catch (error) {
             console.log(error);
         }
@@ -143,10 +141,11 @@ function App() {
             });
             const addressData = response.data.documents[0].address;
             setLocation({ lat: addressData.y, lon: addressData.x });
-            setSearchArea("");
         } catch (error) {
+            alert("결과를 찾을 수 없습니다.");
             console.log(error);
         }
+        setSearchArea("");
     };
 
     useEffect(() => {
@@ -155,8 +154,11 @@ function App() {
 
     useEffect(() => {
         if (location.lat !== null && location.lon !== null) {
-            getCurrentLocationWeather();
-            getForecast();
+            (async () => {
+                await getCurrentLocationWeather();
+                await getForecast();
+                setLoading(false);
+            })();
         }
     }, [location]);
 
@@ -203,14 +205,14 @@ function App() {
                         />
                     </div>
                     <div className="next-weather-view">
-                        {nextWeatherData.map((data, index) => (
-                            <NextWeatherList data={data} key={index} />
+                        {nextWeatherData.map((data) => (
+                            <NextWeatherList data={data} key={data.dt_txt} />
                         ))}
                     </div>
                     <div className="day-weather-view">
                         {dayWeatherData &&
-                            dayWeatherData.map((data, index) => (
-                                <DayWeatherList data={data} key={index} />
+                            dayWeatherData.map((data) => (
+                                <DayWeatherList data={data} key={data.date} />
                             ))}
                     </div>
                 </div>

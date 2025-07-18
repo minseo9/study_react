@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../styles/CurrentWeatherView.css";
 
 const CurrentWeatherView = ({
@@ -34,7 +34,9 @@ const CurrentWeatherView = ({
         }
     };
 
-    getAddressName();
+    useEffect(() => {
+        getAddressName();
+    }, [location]);
 
     return (
         <div className="current-weather-view">
